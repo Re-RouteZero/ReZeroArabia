@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayamatsu IF — إعادة التحديق في عالم آخر من الصفر</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cairo:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #06060c;
+    --bg2: #0a0a14;
+    --surface: #0e0e1a;
+    --surface2: #131320;
+    --border: rgba(255,255,255,0.06);
+    --accent: #c0385a;
+    --accent2: #e05070;
+    --accent-dim: rgba(192,56,90,0.15);
+    --text: #e8e4d8;
+    --text-dim: #b0aa98;
+    --muted: #6a6478;
+    --gold: #c8a85a;
+    --grey-nav: #111118;
+    --reader-bg: #09090f;
+    --reader-max: 720px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Amiri', serif;
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--grey-nav);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 50px;
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600;
+    color: var(--accent2); text-decoration: none; letter-spacing: 0.1em; direction: ltr;
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 0; }
+
+  nav a.nav-item {
+    display: block; padding: 0 0.9rem; height: 50px; line-height: 50px;
+    color: var(--muted); text-decoration: none; font-size: 0.78rem; font-weight: 500;
+    border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; white-space: nowrap;
+  }
+
+  nav a.nav-item:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  .nav-settings {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0 0 0 1rem;
+    border-left: 1px solid var(--border);
+    margin-left: 0.5rem;
+  }
+
+  .icon-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); padding: 0.4rem;
+    border-radius: 6px; transition: color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .icon-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .icon-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  /* ── HERO ── */
+  .story-hero {
+    position: relative;
+    min-height: 480px;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 30% 40%, rgba(160,30,60,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(80,10,30,0.2) 0%, transparent 60%),
+      linear-gradient(180deg, #0a0208 0%, #08060e 50%, #06060c 100%);
+  }
+
+  /* Subtle rain / scratch texture */
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(192,56,90,0.015) 2px,
+      rgba(192,56,90,0.015) 3px
+    );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 3rem 4rem 4rem;
+    max-width: 800px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.68rem; letter-spacing: 0.2em; font-weight: 600;
+    color: var(--accent2);
+    background: rgba(192,56,90,0.12);
+    border: 1px solid rgba(192,56,90,0.25);
+    border-radius: 4px; padding: 0.25rem 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent2);
+  }
+
+  .hero-title-en {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+    direction: ltr;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title-ar {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--gold);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 1.2rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .meta-item {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  .meta-item svg { width: 13px; height: 13px; fill: currentColor; }
+
+  .sin-tag {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+    padding: 0.22rem 0.8rem; border-radius: 999px;
+    background: rgba(192,57,43,0.18); color: #e07060;
+    border: 1px solid rgba(192,57,43,0.3);
+  }
+
+  .spoiler-warning {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.75rem; color: #e07060;
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: 6px; padding: 0.5rem 1rem;
+  }
+
+  .spoiler-warning svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+
+  /* ── SETTINGS PANEL ── */
+  .settings-panel {
+    position: fixed; top: 50px; left: 0; right: 0; z-index: 90;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 2rem;
+    display: none; align-items: center; justify-content: center;
+    gap: 2rem; flex-wrap: wrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .settings-panel.open { display: flex; }
+
+  .setting-group {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  .setting-group label { white-space: nowrap; }
+
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100px; height: 3px; border-radius: 2px;
+    background: var(--border); outline: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+  }
+
+  /* ── CHAPTER NAV ── */
+  .chapter-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chapter-nav::-webkit-scrollbar { display: none; }
+
+  .chapter-tab {
+    display: block; padding: 0.7rem 1.1rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.78rem; font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap; cursor: pointer;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+
+  .chapter-tab:hover { color: var(--text-dim); }
+  .chapter-tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
+
+  /* ── READER ── */
+  .reader-wrap {
+    max-width: var(--reader-max);
+    margin: 0 auto;
+    padding: 4rem 2rem 8rem;
+  }
+
+  .novel-body {
+    font-family: 'Amiri', serif;
+    font-size: 1.08rem;
+    line-height: 2.15;
+  }
+
+  .chapter-section {
+    display: none;
+  }
+
+  .chapter-section.active {
+    display: block;
+    animation: fadeIn 0.35s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem; letter-spacing: 0.3em; font-weight: 600;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .chapter-heading::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* Novel text */
+  .novel-body {
+    font-family: var(--reader-font, 'Cairo'), sans-serif;
+    font-size: var(--reader-size, 1.05rem);
+    line-height: var(--reader-lh, 2.1);
+    color: var(--text);
+  }
+
+  .novel-body p {
+    margin-bottom: 1.4em;
+    text-align: justify;
+  }
+
+  /* Dialogue lines */
+  .novel-body .dialogue {
+    color: var(--text);
+    font-weight: 500;
+    padding-right: 1rem;
+    border-right: 2px solid var(--accent);
+    margin-bottom: 1em;
+    line-height: 1.9;
+  }
+
+  .novel-body .speaker {
+    font-size: 0.8em;
+    color: var(--accent2);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.1em;
+    display: block;
+  }
+
+  /* Scene break */
+  .scene-break {
+    text-align: center;
+    color: var(--accent);
+    margin: 2.5rem 0;
+    letter-spacing: 0.5em;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+
+  /* Death / intense moment */
+  .moment-death {
+    background: linear-gradient(135deg, rgba(192,56,90,0.06), rgba(100,10,20,0.08));
+    border: 1px solid rgba(192,56,90,0.12);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+  }
+
+  .moment-death p { margin-bottom: 0.8em; color: var(--text-dim); }
+  .moment-death p:last-child { margin-bottom: 0; }
+
+  /* Inner thought */
+  .inner-thought {
+    font-style: italic;
+    color: var(--text-dim);
+    opacity: 0.85;
+  }
+
+  /* Section title card */
+  .arc-divider {
+    text-align: center;
+    margin: 3rem 0 2.5rem;
+  }
+
+  .arc-divider span {
+    display: inline-block;
+    font-size: 0.68rem; letter-spacing: 0.4em; font-weight: 600;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.4rem 1.5rem;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .reading-progress {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 80;
+    height: 3px; background: rgba(255,255,255,0.04);
+  }
+
+  .reading-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%; transition: width 0.1s linear;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .chapter-bottom-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-chapter-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.65rem 1.3rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text-dim); text-decoration: none;
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .nav-chapter-btn:hover { border-color: var(--accent); color: var(--accent2); background: var(--accent-dim); }
+  .nav-chapter-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 2rem 2rem;
+    text-align: center; color: var(--muted); font-size: 0.75rem; line-height: 2;
+  }
+
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── DARK / LIGHT toggle ── */
+  body.light-mode {
+    --bg: #f5f2eb;
+    --bg2: #eeeae0;
+    --surface: #eae6dd;
+    --surface2: #e0dcd2;
+    --border: rgba(0,0,0,0.1);
+    --text: #1a1510;
+    --text-dim: #3a3020;
+    --muted: #8a8070;
+    --reader-bg: #f5f2eb;
+    --grey-nav: #2a2520;
+  }
+
+  body.light-mode nav { background: #2a2520; }
+  body.light-mode .chapter-nav, body.light-mode .settings-panel { background: #eae6dd; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .hero-content { padding: 2rem 1.5rem 3rem; }
+    .reader-wrap { padding: 2rem 1rem 6rem; }
+    nav a.nav-item { padding: 0 0.5rem; font-size: 0.72rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chapter-section.active { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">Re:Zero</a>
+  <div class="nav-links">
+    <a class="nav-item" href="index.html">الرئيسية</a>
+    <a class="nav-item" href="whatif.html">قصص ماذا لو</a>
+    <a class="nav-item" href="canonical.html">القصة الأساسية</a>
+    <a class="nav-item" href="artistes.html">حقوق النشر</a>
+    <div class="nav-settings">
+      
+        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.07-2.43a7 7 0 0 0 .07-.57 7 7 0 0 0-.07-.57l1.24-.97a.3.3 0 0 0 .07-.38l-1.17-2.03a.3.3 0 0 0-.36-.13l-1.46.59a5.28 5.28 0 0 0-.98-.57l-.22-1.55a.3.3 0 0 0-.3-.26h-2.34a.3.3 0 0 0-.3.26l-.22 1.55a5.28 5.28 0 0 0-.98.57l-1.46-.59a.3.3 0 0 0-.36.13L4.69 11.08a.3.3 0 0 0 .07.38l1.24.97a5.18 5.18 0 0 0-.07.57c0 .19.02.38.07.57l-1.24.97a.3.3 0 0 0-.07.38l1.17 2.03c.07.13.22.17.36.13l1.46-.59c.31.22.63.41.98.57l.22 1.55c.04.15.17.26.3.26h2.34c.14 0 .26-.11.3-.26l.22-1.55c.35-.16.67-.35.98-.57l1.46.59c.14.04.29 0 .36-.13l1.17-2.03a.3.3 0 0 0-.07-.38l-1.24-.97z"/></svg>
+     
+      <button class="icon-btn" id="themeBtn" title="تبديل المظهر" aria-label="مظهر">
+        <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="setting-group">
+    <label>حجم النص</label>
+    <input type="range" id="fontSizeSlider" min="14" max="22" value="17" step="1">
+    <span id="fontSizeVal">17px</span>
+  </div>
+  <div class="setting-group">
+    <label>تباعد الأسطر</label>
+    <input type="range" id="lineHeightSlider" min="160" max="260" value="210" step="10">
+    <span id="lineHeightVal">2.1</span>
+  </div>
+</div>
+
+<!-- STORY HERO -->
+<div class="story-hero" style="text-align:center; align-items:center; justify-content:center;">
+  <div class="hero-bg"></div>
+  <div class="hero-content" style="max-width:700px; padding: 4rem 2rem 4.5rem; margin:0 auto;">
+    <div class="hero-badge" style="margin:0 auto 1.2rem;">قصة IF — الكبرياء</div>
+    <h1 class="hero-title-en" style="text-align:center; direction:ltr;">Ayamatsu IF</h1>
+    <p class="hero-title-ar" style="text-align:center;">إعادة التحديق في عالم آخر من الصفر</p>
+    <div class="hero-meta" style="justify-content:center;">
+      <span class="meta-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 14.93V18h-2v-1.07A8 8 0 0 1 4 9V8h2v1a6 6 0 0 0 12 0V8h2v1a8 8 0 0 1-7 7.93z"/></svg>
+        يبدأ من الفصل الأول
+      </span>
+      <span class="meta-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        حرق — الفصل الخامس
+      </span>
+      <span class="sin-tag">خطيئة الكبرياء</span>
+    </div>
+
+    <!-- Route explanation -->
+    <div style="
+      background: rgba(192,56,90,0.07);
+      border: 1px solid rgba(192,56,90,0.18);
+      border-radius: 10px;
+      padding: 1.2rem 1.6rem;
+      margin: 1.4rem 0 1.2rem;
+      text-align: right;
+      font-family: 'Amiri', serif;
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 2;
+    ">
+      <span style="display:block; font-size:0.7rem; letter-spacing:0.2em; color:var(--accent); font-weight:600; margin-bottom:0.5rem; text-align:right;">عن هذا المسار</span>
+      هذا مسار <strong style="color:var(--text);">خطيئة الكبرياء</strong> — ماذا كان سيحدث لو لم يطلب سوبارو المساعدة من <strong style="color:var(--text);">رينهارد</strong> قطّ؟ قرار واحد، كبرياءٌ لم يكسره، وعالمٌ انزلق نحو الظلام بلا رجعة.
+    </div>
+
+    <div class="spoiler-warning" style="margin:0 auto; display:inline-flex;">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      تحذير: هذه القصة تحتوي على حرق كبير للفصل الخامس من الرواية الرئيسية
+    </div>
+  </div>
+</div>
+
+<!-- CHAPTER NAVIGATION -->
+<div class="chapter-nav">
+  <button class="chapter-tab active" data-chapter="1">الجزء الأول — الموت والعودة</button>
+  <button class="chapter-tab" data-chapter="2">الجزء الثاني — العاصمة</button>
+  <button class="chapter-tab" data-chapter="3">الجزء الثالث — إلسا وما بعدها</button>
+  <button class="chapter-tab" data-chapter="4">الجزء الرابع — الاختيار الملكي</button>
+  <button class="chapter-tab" data-chapter="5">الجزء الخامس — النهاية</button>
+</div>
+
+<!-- READER -->
+<div class="reader-wrap">
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 1 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section active" id="chapter-1">
+    <div class="chapter-heading">الجزء الأول — الموت والعودة</div>
+    <div class="novel-body">
+
+      <div class="moment-death">
+        <p>لم يكن يشغل ذهنه سوى الحرارة الشديدة التي تملأ معدته.</p>
+        <p class="dialogue"><span class="speaker">سوبارو</span>آغغغغ! ساخن!</p>
+        <p>وبينما كان وجهه يضغطه ألمُ صلابة الأرضية، أدرك سوبارو أنه سقط على بطنه. لكن أطرافه لم تستطع أن ترفع جسده من جديد، فظلت ساكنة بلا حراك. كان الأمر كما لو أنه لم يعد هو نفسه، وكأن جسده قد سُرق منه.</p>
+        <p>ومع ذلك، ظلّ اللهب ينهش سوبارو. ولم يكن في الأمر وهمًا أو خديعة.</p>
+        <p class="inner-thought">حار! حار! حار! تتوالى الحرارة كأنها لا تنتهي… حار… حار…</p>
+        <p>فتح فمه، وبدلاً من الصراخ، تدفقت منه تياراتٌ من الدم. في ألمٍ ومعاناة، كاد يغرق في دمه وهو يعاني من أشد أنواع العذاب.</p>
+      </div>
+
+      <p class="inner-thought">ما الذي فعَلَته بحقّ الجحيم؟</p>
+
+      <p>كان يتوسل الهروب كوسيلةٍ للتخلص من الألم، فيما كانت الشكوى تتردد في رأسه بلا انقطاع.</p>
+
+      <p>كان يعلم أن حياته لا تستحق الثناء دون تحفظ. لكن هذا قولٌ لم يكن ينطبق على سوبارو وحده. ليس بوسع أحد أن يعيش حياةً نقية لدرجة أن تسمح له بالتباهي بها أمام البشرية جمعاء. فالناس يشعرون بالذنب، ويشعرون بالندم، ويتظاهرون بالجهل، ويقدمون على تنازلات.</p>
+
+      <p>فلماذا كان عليه وحده أن يعاني من ذلك؟</p>
+
+      <p>لماذا كان هذا القدر يُفرض عليه وحده دون سواه؟</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>آه، اللعنة…</div>
+
+      <p>وهو يهمس وسط سيلٍ من الدماء. كان يحمل في طيّاته الندم، واشمئزازه من عجزه، وكراهيته لقدره — وإحباطه من نفسه.</p>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <div class="moment-death">
+        <p>حتى مع كل هذه الجروح، حتى مع كل هذا العذاب، وهذه الآلام — حتى لو كانت النار تحرقه، حتى لو كان الألم يحطمه، حتى لو كانت حياته مهددة…</p>
+        <p>الفتاة الراسخة في ذهنه ستواجه، بابتسامة، تكرار الموت المؤسف الذي لا مفر منه. وهكذا…</p>
+        <div class="dialogue"><span class="speaker">سوبارو</span>سأفعل…</div>
+        <p>من جديد، أعلن عزيمته. كان يعلن عزيمته. كان يعلن ألمه وندمه. وهو يسعى نحو مستقبل، رغم محاولاتٍ لا تُحصى، وجهودٍ لا تُعد، ورغباتٍ لا تنتهي، لن يبلغَه أبدًا.</p>
+        <p>كان الألم والحرارة وكل شيء يتلاشى، وكان، ككلبٍ يئن، يصرخ.</p>
+        <div class="dialogue"><span class="speaker">سوبارو</span>مهما حدث——</div>
+        <p>انقضّ بريقُ سيفٍ بلا رحمة على آخر بصيص أمل لديه. لكن ذلك السيف لم يكن حتى ضمن مجال رؤيته. لقد كان قد اتخذ قراره بالفعل.</p>
+        <p style="text-align:center; color: var(--accent2); font-family: 'Amiri', serif; font-size: 1.1rem;">——إنقاذك.</p>
+        <p>وفي اللحظة التي جدّد فيها هذا التمني، فقد ناتسوكي سوبارو حياته.</p>
+      </div>
+
+      <!-- صورة -->
+      <div style="margin: 2.5rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); min-height: 220px; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:0.6rem;">
+        <img src="images/ayamatsu.png" alt="Ayamatsu IF" style="width:100%; max-height:340px; object-fit:cover; display:block;" onerror="this.parentElement.style.minHeight='120px'">
+      </div>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" disabled>← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">١ / ٥</span>
+        <button class="nav-chapter-btn" id="next-1">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 2 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-2">
+    <div class="chapter-heading">الجزء الثاني — العاصمة</div>
+    <div class="novel-body">
+
+      <p>وأمام هذا المشهد المألوف، شعر سوبارو براحةٍ غريبةٍ وإرهاقٍ عميق.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لقد عدتِ سالمة، فلا داعي للخوف، على ما أظن.</div>
+
+      <p>بينما كان يراقب حركة العاصمة الملكية، رسم سوبارو بعصا على الأرض علامات متكررة على شكل «||||»، ثم واصل ذلك حتى اكتفى، قبل أن يمحوها بقدمه ويطلق تنهيدة.</p>
+
+      <p>كان ناتسوكي سوبارو من الكوكب الثالث بعد الشمس، والذي يُسمّى الأرض. وكان وضعه طالبًا معتادًا على الهروب من المدرسة في الصف الثالث الإعدادي.</p>
+
+      <p>ولو رأى أحد مظهره غير الرسمي — بدلة رياضية، حذاء رياضي — والكيس البلاستيكي الذي يحمله، فلن يشك في ذلك. لكن هذا ينطبق فقط على من يعرف مفاهيم مثل «البدلات الرياضية» و«الأحذية الرياضية».</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>قصة «الاستدعاء إلى عالمٍ آخر» أصعب مما كنت أظن.</div>
+
+      <p>انطلقت عربةٌ تجرّها سحليةٌ بحجم حصان تثير الغبار وهي تمرّ أمام سوبارو. كان مثل هذا المشهد مستحيلًا طبعًا في العالم الذي يعرفه سوبارو. كانت السحالي تعجّ بها الشوارع، ويقودها كائناتٌ بشرية الشكل تحمل سمات ما يُسمّى بالرجال-الوحوش أو أنصاف البشر.</p>
+
+      <p>لكن لا يمكنه أن يظل هنا محاولًا الهروب من الواقع إلى الأبد. فالغريب هنا لم يكنوا هم، بل سوبارو نفسه.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>حان الوقت للذهاب.</div>
+
+      <div class="arc-divider"><span>الزقاق والأشرار الثلاثة</span></div>
+
+      <p>أمسك العصا بيده اليمنى وهو ينزل إلى الطريق — ليس الطريق الرئيسي حيث سيضيع وسط الحشود، بل الأزقة الجانبية. كانت الأزقة الخلفية قليلة السكان، محصورة بين مبانٍ عالية. يمكن اعتبارها ممرًا ضيقًا، طريقًا وحيدًا معزولًا عن العالم بصمته.</p>
+
+      <p class="inner-thought">وبعبارة أخرى، هذا مكانٌ يمكن أن يحدث فيه شيء ما، ولن تصل الصرخات إلى الشارع الرئيسي.</p>
+
+      <p>لذلك، إذا دخل شخص غريب بشكل واضح مثل سوبارو إلى هنا، فإن اللصوص سيظهرون بطبيعة الحال لاستهدافه.</p>
+
+      <div class="dialogue"><span class="speaker">???</span>مهلاً يا صديقي، تعال والعب معنا قليلًا.</div>
+
+      <p>التفت سوبارو نحو الصوت، ليجد ثلاث ظلال تسدّ الزقاق. كانوا ثلاثة أشخاص، كبير ومتوسط وصغير.</p>
+
+      <div class="dialogue"><span class="speaker">???</span>لماذا تبدو غائب الذهن هكذا؟</div>
+      <div class="dialogue"><span class="speaker">???</span>لا يفهم ما يحدث. لنعرّفه قليلًا.</div>
+
+      <p>لكنهم كانوا مخطئين تمامًا. كان صحيحًا أن سوبارو لا يملك أي خبرة حقيقية في القتال، ولا تاريخًا خفيًا في الفنون القتالية. مبتدئ، نعم، هذا الجزء من تقديرهم لم يكن خاطئًا.</p>
+
+      <p>لكن في القتال ضد هؤلاء الثلاثة تحديدًا، كان سوبارو بالفعل خبيرًا.</p>
+
+      <p>نحو العملاق الغافل — عضو الثلاثي «تون» — مدّ سوبارو ذراعه. كانت في يده العصا التي التقطها سابقًا، ورغم أنها لم تكن ذات طرف حاد، إلا أنها اندفعت نحو الجزء الرخو من حلق «تون»، وغرست نفسها في رقبته.</p>
+
+      <p>اتسعت عينا «تون» فورًا، بينما جُمِّد الآخران في أماكنهما. امتدت يد سوبارو الحرة نحو المتوسط — تشين — أمسكه من شعره وأذنه، وأداره بعنف. ارتطم رأسه بالجدار. انفجر صوت تكسّر، وانزلق «تشين» تاركًا أثر دم على الجدار قبل أن ينهار أرضًا.</p>
+
+      <p>الآن أصبح اثنان منهم عاجزين عن القتال.</p>
+
+      <p>كان «كان» الصغير قد تجمّد من الرعب بدلًا من الفرار. ففات الأوان بالفعل.</p>
+
+      <p>أحكم سوبارو قبضته حول عنق «كان» النحيل، ودفع ظهره إلى الجدار.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>الآن… هل تدركون كم مرة التقيتم بي حتى الآن؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>ثمانٍ وثمانون مرة. حسنًا، يبدو أن مشاركتكم تزداد باستمرار. أنتم مصممون فقط لتكونوا مادة للسخرية.</div>
+
+      <p>ثم نظر إلى الثلاثة المهزومين، وبدأ يدوس أعناقهم بحذائه للتأكد. وبعد لحظة تفكير قصيرة، سرق سوبارو سكينين من «تشين»، ثم جرّ الجثث إلى نهاية الزقاق، وخرج من الأزقة وكأن شيئًا لم يحدث.</p>
+
+      <div class="arc-divider"><span>الفتاة ذات الشعر الفضي</span></div>
+
+      <p>اندفع سوبارو مسرعًا نحو الشارع الرئيسي بحثًا عن هدفه. توقف للحظة وهو يراقب الشارع، ووضع يده على صدره.</p>
+
+      <div class="dialogue"><span class="speaker">صوت فتاة</span>انتظر! أرجوك انتظر!!</div>
+
+      <p>كان صوتًا كجرسٍ فضي يشقّ ضجيج السوق. صوت يختلط فيه اليأس، لكنه لا يخفي نعومة صاحبته.</p>
+
+      <p>كانت فتاة شقراء تضحك وهي تنسلّ بين الناس بابتسامة ماكرة، وفي يدها شيء يلمع. وفي اتجاهها انطلقت ومضة زرقاء — رمحٌ جليدي — في قلب الشارع.</p>
+
+      <p>بمجرد أن رآها، شعر أن العالم توقف.</p>
+
+      <p>الرياح، الأصوات، وحتى الزمن نفسه اختفى من إدراكه، وكأن كل انتباهه انحصر فيها وحدها. شعرها الفضي الطويل يتمايل خلفها، وعيناها بلون الجمشت تلمعان بإرادة قوية. جسدها الأبيض النحيل بدا كأنه صُنع لفتاةٍ خيالية.</p>
+
+      <p>في هذا العالم المتجمد، كانت هي الوحيدة التي تتحرك. تجاوزته تمامًا وهي تركض.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>سأقوم… وبأي ثمن… بإنقاذك.</div>
+
+      <p>ثم كرر وعده للمرة الثامنة والثمانين وهو يراقبها تبتعد. وإن كان قد كسر وعده كثيرًا، فلم يعد متأكدًا من قيمته. لكن إن استمر… إن لم يستسلم… إن واصل القتال من أجل إنقاذها…</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>انتظريني… — ساتيلا.</div>
+
+      <!-- صورة -->
+      <div style="margin: 2.5rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); min-height: 180px; display:flex; align-items:center; justify-content:center;">
+        <img src="images/oboreru.png" alt="ساتيلا وسوبارو" style="width:100%; max-height:300px; object-fit:cover; display:block;" onerror="this.parentElement.style.display='none'">
+      </div>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-2">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٢ / ٥</span>
+        <button class="nav-chapter-btn" id="next-2">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 3 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-3">
+    <div class="chapter-heading">الجزء الثالث — إلسا وما بعدها</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>ثمانٍ وثمانون محاولة</span></div>
+
+      <p>العودة بالموت — القدرة على عكس الزمن بعد الموت. استخدم سوبارو هذه القدرة لإعادة العالم ثمانٍ وثمانين مرة. كان على وشك تجاوز المئة محاولة، وكلها من أجل إنقاذ الفتاة ذات الشعر الفضي، ساتيلا، من مصيرها المحتوم.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>أظن أنني جرّبت كثيرًا في هذه المحاولة… لكن الأمر لن ينجح كما حدث مع تون-تشين-كان.</div>
+
+      <p>كان هذا استنتاجه بشأن أعظم عدو واجهه: «إلسا غرانهييرت».</p>
+
+      <p>حاول سوبارو مرارًا خلال سبعٍ وثمانين محاولة سابقة القضاء عليها، لكنه كان يخسر أمام مهاراتها القتالية الخارقة، ويموت وبطنه ممزق أكثر من خمسين مرة. لم تكن خصمًا يمكنه هزيمته.</p>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <p>كلما شقّت السيوفُ الهواء، تناثر الدم. كانت الجثث المتساقطة في الشوارع كثيرةً إلى حدٍّ لا يمكن عدّها على أصابع اليد، بينما كانت إلسا، الملطخة بالدماء، تغرق في نشوةٍ عارمة.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>…فشلٌ آخر، أليس كذلك.</div>
+
+      <p>تنهد سوبارو وهو يضيق عينيه، يراقب المشهد الدموي من فوق أحد الأسطح. في حيٍّ من أحياء الفقراء، مهجورٍ ومتهالك. أولئك الذين كانوا يتبادلون الضربات مع إلسا، والذين كانوا يُسقطون بسكاكينها دون رحمة، كانوا حراس العاصمة.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لم أكن أظن أن هناك فجوة قوةٍ بهذا الحجم بين الحراس العاديين وإلسا…</div>
+
+      <p>كان الأمر أشبه بإعداد خرافٍ تُذبح بكل سرور أمامها.</p>
+
+      <p>ثم ظهر شعاعٌ من الضوء عبر الأحياء الفقيرة.</p>
+
+      <div class="dialogue"><span class="speaker">حارس</span>رينهارد-ساما!</div>
+
+      <p>شابٌ بشعرٍ أحمر مشتعل، وعينين زرقاوين كسماءٍ صافية. بنيته قوية ومرنة تحت بدلته البيضاء. وعلى خصره سيفٌ بدا أكبر من المعتاد.</p>
+
+      <div class="dialogue"><span class="speaker">رينهارد</span>من فضلكم ابتعدوا. هذه المرأة هي «آكلة الأحشاء». لا أريد أن يزداد عدد الضحايا أكثر.</div>
+
+      <p>كان يشفق على الأرواح التي سقطت، ويغضب من القاتلة إلسا. حتى سوبارو، الذي كان يراقب من بعيد، استطاع أن يدرك طبيعة هذا الرجل. عدلٌ، نيةٌ صافية، وإرادة لا تشوبها شائبة.</p>
+
+      <div class="dialogue"><span class="speaker">إلسا</span>رينهارد فان أستريا… من سلالة أساتذة السيف. رائع! مذهل بحق!</div>
+      <div class="dialogue"><span class="speaker">رينهارد</span>كثيرًا ما أشعر بثقل التوقعات. هل أنتِ آكلة الأحشاء؟</div>
+      <div class="dialogue"><span class="speaker">إلسا</span>نعم، أنا هي. يا إلهي… ماذا أفعل؟ أريد أداء عملي، لكني الآن أمامك مباشرة.</div>
+
+      <div class="moment-death">
+        <p>وفي لحظة واحدة، اندفعا نحو بعضهما. وانتهت المواجهة بضربةٍ واحدة.</p>
+        <p>شعاعٌ من الضوء مزّق المكان، ودمر جزءًا كاملًا من الأحياء الفقيرة. كان ذلك سيف «سيد السيوف» — تجسيدًا للقوة المطلقة.</p>
+        <p>سوبارو، بعينين متسعتين، كان يراقب المشهد. دمعةٌ على خده، وركبتاه ترتجفان، دون أن يعرف السبب.</p>
+      </div>
+
+      <!-- صورة -->
+      <div style="margin: 2.5rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); min-height:180px; display:flex; align-items:center; justify-content:center;">
+        <img src="images/Kasaneru.png" alt="رينهارد وإلسا" style="width:100%; max-height:300px; object-fit:cover; display:block;" onerror="this.parentElement.style.display='none'">
+      </div>
+
+      <div class="arc-divider"><span>التحالف الغريب</span></div>
+
+      <p>سارت الأمور بشكلٍ مختلف عما توقعه سوبارو، لكن يمكن القول إن الهدف الرئيسي — هزيمة إلسا — قد تحقق. لم يكن يتوقع تدخل رينهارد، لكن بما أن النتيجة كانت لصالحه، فقد كان راضيًا.</p>
+
+      <div class="dialogue"><span class="speaker">إلسا</span>لماذا تساعدني؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>لستِ بحاجة لثقتي. إن كنتِ لا تمانعين أن يحيط بكِ الحراس وتفقدي فرصة الانتقام، فاقتليني واهربي.</div>
+
+      <p>كان سوبارو يستند إلى الجدار وهو يتحدث إلى إلسا الجاثية. كانت مغطاة بالدماء، ثيابها السوداء ممزقة، وجروحها فظيعة.</p>
+
+      <div class="dialogue"><span class="speaker">إلسا</span>إنها تؤلمني… تؤلمني جدًا… ربما أموت… هاها، إنه شعور رائع.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>هناك أشياء لا أفهمها فيكِ… لا يجب أن تموتي الآن.</div>
+      <div class="dialogue"><span class="speaker">إلسا</span>ما لا أفهمه هو هدفك الحقيقي.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>أردتُ فقط أن أجعلكِ تحت مسؤوليتي. قد يكون من المفيد أن أحتفظ بكِ إلى جانبي يومًا ما.</div>
+      <div class="dialogue"><span class="speaker">إلسا</span>دينٌ في عنقك… أمرٌ غريب. مع أنك متعطش لقتلي إلى هذا الحد.</div>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>أريد حقًا قتلكِ. وسأقتلكِ يومًا ما. لكن ليس الآن.</div>
+      <div class="dialogue"><span class="speaker">إلسا</span>أفهم.</div>
+
+      <p>لم يعد هناك حاجة لإخفاء شيء. ثقة مغموسة بالدم، اكتسبها بعد أن قُتل على يد إلسا أكثر من ثمانين مرة.</p>
+
+      <div class="dialogue"><span class="speaker">إلسا</span>رائع… أنت وأنا مرتبطان بالكراهية. يومًا ما، نعم… ستثبت أنك على حق. وهذا أمرٌ جميل جدًا.</div>
+
+      <p>ارتسمت على شفتي إلسا الملطختين بالدماء ابتسامةٌ هادئة، كفتاةٍ مغرمة. وبجانب تلك الابتسامة، فكر سوبارو من أعماقه:</p>
+      <p class="inner-thought">مقزز.</p>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لِنلتقِ مجددًا، حسنًا؟</div>
+      <div class="dialogue"><span class="speaker">???</span>وداعًا يا أخي. شكرًا لمساعدتك إلسا.</div>
+
+      <p>الفتاة ذات الشعر الأزرق التي التقيا بها تولّت رعاية إلسا. كانت الفتاة التي كانت تنتظر في الكوخ صغيرة جدًا، في حدود العاشرة من عمرها. ورغم صغر سنها، كانت تعالج جروح إلسا بمهارة.</p>
+
+      <p>وبعد فترة، وصل سوبارو إلى بيت المسروقات. واتسعت عيناه مما رآه.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لم أكن أتوقع هذا.</div>
+
+      <p>كان المنزل مغطى بالجليد. مختومًا داخل الجليد بالكامل.</p>
+
+      <p>سأل أحد سكان المنطقة بسرعة، فعلم أن العجوز صاحب بيت المسروقات وحفيدته قد اعتُقلا من قبل الحراس، وأنهم أغضبوا ساحرًا مخيفًا — لكن لا يوجد جرحى.</p>
+
+      <p>تنهد سوبارو براحة. كان اعتقال «فلت» و«روم» أمرًا متوقعًا بالنظر إلى عملهم. سيقضيان بعض الوقت في السجن، ليفكرا في أفعالهما. وبما أن ساتيلا بخير الآن…</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>جيد. ماذا أفعل الآن؟</div>
+
+      <p>تم استدعاؤه إلى عالم آخر، أُعطي «الموت العكسي»، استخدمه، وأنقذ نصف إلفية جميلة ذات شعر فضي. ورغم أنه مات ثمانٍ وثمانين مرة.</p>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-3">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٣ / ٥</span>
+        <button class="nav-chapter-btn" id="next-3">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 4 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-4">
+    <div class="chapter-heading">الجزء الرابع — الاختيار الملكي</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>اسمها إميليا</span></div>
+
+      <p>بعد ما يقارب شهرين، علم سوبارو المزيد عن ساتيلا.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>في إطار الاختيار الملكي! نصف إلفية ذات شعر فضي! مدعومة من الماركيز روزوال ل. ماثرز! ليست ساتيلا… اسمها إميليا——!</div>
+
+      <p>صفّق سوبارو بسعادة عند قراءة الإعلان الرسمي. كان إعلان القصر الملكي عن مسابقة العرش. كانت المرشحات خمس نساء، وكانت إحداهن الفتاة التي يبحث عنها.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>الاختيار الملكي… إذا كانت مرشحة للحكم فهذا يعني أنها نبيلة… إميليا… اسمها إميليا…</div>
+
+      <p>بمجرد أن عرف اسمها الحقيقي، شعر وكأن قلبه صار خفيفًا. كان يعلم منذ زمن أن «ساتيلا» اسم مستعار. والآن فهم سبب استخدام إميليا لذلك الاسم.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>سيرتبط اسمها بساتيلا وسيتجنبها الناس… كانت تحاول حمايتي… يا لها من فتاة لطيفة…</div>
+
+      <div class="arc-divider"><span>قتال الأساقفة</span></div>
+
+      <p>لم يكن لدى سوبارو الوقت للتمتع بهذا الاكتشاف. بيتلجيوس روماني-كونتي، روح شريرة، كان يحاول الاستيلاء على جسد وسيط روحي. لكن شرط الاستيلاء كان واضحًا — يجب ألّا يكون للوسيط عقد مع روح أخرى.</p>
+
+      <p>سوبارو كان قد عقد صفقة مع روح صغيرة تتوهج على أصابع يده اليسرى بضوء أحمر خافت. وهذا العقد أغلق الطريق أمام بيتلجيوس.</p>
+
+      <p>تقدم بهدوء نحو بيتلجيوس، ثم وجه له ركلة في وجهه. قوة الضربة أسقطت بعض أسنانه وأفقدته توازنه.</p>
+
+      <div class="dialogue"><span class="speaker">بيتلجيوس</span>ناتسوكي سوباروووو!</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>لقد استهدفت إميليا. —— فلتندم على ذلك.</div>
+
+      <div class="moment-death">
+        <p>أطلق بيتلجيوس صرخة مليئة بالكراهية، ثم تلقى ركلة من سوبارو في صدره وطعنة سيف في وجهه. اخترقت النصل جمجمته، مدمّرة دماغه وحياته. انقطعت الصرخة المرعبة.</p>
+      </div>
+
+      <p>استند سوبارو على السيف المغروز في جسد بيتلجيوس وهو يتنهد. في الواقع، كانت المعركة قصيرة جدًا، لكن بالنسبة لسوبارو بدت طويلة للغاية.</p>
+
+      <div class="dialogue"><span class="speaker">ميلي</span>همم؟ يبدو أنك انتهيت بالفعل.</div>
+
+      <p>بعد فترة من الصمت، سُمعت صوتٌ يخاطب سوبارو. التفت، ليجد هيئة ضخمة تشق طريقها عبر الشجيرات — وحشٌ بجلد أسود ورأس أسد وأطراف مرعبة. لكن المتحدثة الحقيقية كانت الفتاة التي كانت على ظهره، تنظر إلى سوبارو بابتسامة جذابة.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>نعم، انتهيت. شكرًا لكِ، ميلي.</div>
+      <div class="dialogue"><span class="speaker">ميلي</span>لا مشكلة. أنت تدفع لنا، وقد اعتنيتَ بإلسا. لكن… هل أنت متأكد من هذا؟ كنت أظن أنهم أصدقاؤك.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>لا أدري. لو أنه لم يحاول قتلي في النهاية، ربما كنا سنُسمّي أنفسنا أصدقاء… لكن بما أنه حاول قتلي، فهو للأسف غير مؤهل.</div>
+      <div class="dialogue"><span class="speaker">ميلي</span>همم. أنا لا أحاول قتلك، إذن نحن أصدقاء؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>منطقيًا نعم. نحن أصدقاء يا ميلي.</div>
+      <div class="dialogue"><span class="speaker">ميلي</span>ياي! الآن لدي الكثير من الأصدقاء!</div>
+
+      <p>لكنها قالت بعد ذلك بابتسامة:</p>
+      <div class="dialogue"><span class="speaker">ميلي</span>لكنني قتلتهم جميعًا.</div>
+
+      <p>تجمّد سوبارو. كانت تبتسم دون شعور بالذنب. أخلاقها مشوهة، كما هو متوقع من أخت إلسا.</p>
+
+      <div class="arc-divider"><span>الحلفاء الغريبون</span></div>
+
+      <p>كان سوبارو ينفذ عمليات سرّية واحدة تلو الأخرى، يقضي على المرشحين والأساقفة الذين يقفون في طريقه. وبدأت تتشكل حوله علاقات غريبة — يمكن وصفها بأنها «تعاون».</p>
+
+      <div class="dialogue"><span class="speaker">ميلي</span>لكننا عملنا معًا منذ البداية، أليس كذلك؟ أنا سعيدة لأنك تسمح لي بالمساعدة يا أوني-سان.</div>
+      <div class="dialogue"><span class="speaker">إلسا</span>لا أتعهد بطاعة أحد، لكن فكرة أنك قد تحاول قتلي في أي لحظة… تجعلني سعيدة بشكل غريب.</div>
+      <div class="dialogue"><span class="speaker">بلو</span>حلم صاحبة السمو سيتحقق بوجودك يا سوبارو-ساما… لذلك سأبقى معك دائمًا.</div>
+      <div class="dialogue"><span class="speaker">???</span>علاقتنا مجرد أعمال قذرة متبادلة. لا أصدقاء هنا. نحن مجرد موتى أحياء.</div>
+      <div class="dialogue"><span class="speaker">روسوال</span>لقد قطعتُ شوطًا بعيدًا… خطوة واحدة أخرى فقط تفصلني عن تحقيق رغبتي. وإذا كان الثمن هو روحي… فسأبيعها. لك أنت، بالطبع.</div>
+
+      <p>لم يكن سوبارو يرى ما يفعله شيئًا نبيلًا. ومع ذلك، دون أن يشعر، أصبح محاطًا بأشخاص يوافقون على أفعاله. ربما كان ذلك هو عزاؤه الوحيد.</p>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-4">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٤ / ٥</span>
+        <button class="nav-chapter-btn" id="next-4">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 5 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-5">
+    <div class="chapter-heading">الجزء الخامس — النهاية</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>الجحيم يلتهم العاصمة</span></div>
+
+      <div class="moment-death">
+        <p>كان الجحيم يلتهم العاصمة.</p>
+        <p>سوبارو يلهث، ممسكًا بجسد ميلي الصامت. لم تعد هناك حياة في عينيها.</p>
+        <p>هذه المرة… لم يكن هناك رجوع. «نقطة البداية الجديدة» لقدراته على العودة بالموت كانت هنا، ومع موت ميلي، لم يعد بإمكانه إنقاذها.</p>
+        <p>أغلق عينيها برفق.</p>
+      </div>
+
+      <p class="inner-thought">لا يمكنني حتى أن أطلب لها الراحة… يداي ملوثتان بالدماء.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لكن… رغم ذلك…</div>
+
+      <p>لن يتوقف. لقد مات آلاف المرات، وضحى بآلاف الأرواح، وكل ذلك ليصل إلى هنا.</p>
+
+      <div class="arc-divider"><span>مواجهة سيد السيوف</span></div>
+
+      <div class="dialogue"><span class="speaker">???</span>——كفى.</div>
+
+      <p>صوتٌ بارد هبط من الأعلى. ارتفع أمامه رجلٌ يشبه أسطورة السيف: ريـنهارد فان أستريا.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>ريـنهارد…</div>
+      <div class="dialogue"><span class="speaker">ريـنهارد</span>ليس لدي ما أقوله لك.</div>
+
+      <p>في عينيه، لم يعد هناك أي حياد. بل شيء أثقل… شيء يشبه الكراهية.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>أيمكنك أن تكره إذًا يا سيد السيف؟</div>
+      <div class="dialogue"><span class="speaker">ريـنهارد</span>حتى أنا… لا أفهم هذا الشعور.</div>
+
+      <p>سوبارو يضحك.</p>
+      <p class="inner-thought">أنت حقًا بطل… دائمًا على حق.</p>
+      <p>لكن هذا البطل… يجب أن يسقط.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>كم مرة حاولت قتلك؟ مئات؟ آلاف؟ لا يمكنك حتى تخيل ذلك!</div>
+
+      <p>ريـنهارد صمت.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>أنا لا أستطيع قتلك كفارس… لذلك سأقتلك كرمز. سأدوس اسمك يا أسطورة السيف!</div>
+
+      <p>ثم سقط الصمت.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لماذا أنت قوي هكذا؟!</div>
+
+      <p>صوت سوبارو ارتجف.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لماذا أنا من اضطر لأن يضحي بكل شيء فقط لأقف أمامك؟!</div>
+
+      <p>دموعه سقطت. حتى هو لم يفهم لماذا يبكي.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>كنت أريد أن أكون مثلك… صادقًا، قويًا، قادرًا على إنقاذ الجميع…</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>أردت أن أكون أنت يا رينهارد…</div>
+
+      <p>ثم صمت. بينما كان رينهارد يتهيأ لإنهاء الأمر…</p>
+
+      <div class="dialogue"><span class="speaker">???</span>——ألا تعتقد أن الاستسلام مبكر قليلًا؟</div>
+
+      <p>إلسا قفزت بينهما. كانت لا تزال حيّة.</p>
+
+      <div class="dialogue"><span class="speaker">إلسا</span>يبدو أنني لم أمت بعد… للأسف.</div>
+
+      <div class="arc-divider"><span>اللحظة الأخيرة</span></div>
+
+      <div class="moment-death">
+        <p>سقط الـ Guiltylaw على الأرض وهو يزأر، لكن جراحه كانت أعمق من أن تسمح له بالوقوف طويلًا. ارتجف جسده الضخم، وتبعثرت أنفاسه الثقيلة في هواء العاصمة المحترق.</p>
+        <p>في لحظةٍ خاطفة، انطلقت هالة باردة كالسيف من الطرف الآخر، وتلاها صوت خطوات هادئة فوق الحطام المشتعل. حضورٌ لا يمكن تجاهله… كأنه تجسيدٌ للعدالة نفسها وسط جحيمٍ فقد معناه.</p>
+      </div>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>……لا.</div>
+
+      <p>خرجت الكلمة من بين شفتيه مكسورة، كأنها لم تعد تملك وزنها في هذا العالم. لم يكن يرى سوى نتيجة واحدة. ذلك الشخص الذي يقف أمامه، وسط اللهب، لم يكن مجرد خصم… بل كان النهاية التي لا يمكن التفاوض معها.</p>
+
+      <p>رفع Reinhard سيفه بهدوء، دون استعجال، دون غضبٍ ظاهري. ومع ذلك، كان الهواء نفسه ينكمش حوله.</p>
+
+      <div class="dialogue"><span class="speaker">رينهارد</span>انتهى كل شيء.</div>
+
+      <p>لم تكن جملة تهديد، بل حكمًا صادرًا بلا انفعال.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>هاه… هاها…</div>
+
+      <p>ضحكة قصيرة خرجت من سوبارو، لكنها لم تكن ضحكة جنون بقدر ما كانت اعترافًا مريرًا بالهزيمة.</p>
+
+      <p>لقد ذهب بعيدًا. أبعد مما ينبغي. أكثر مما يمكن لأي إنسان أن يتحمله.</p>
+
+      <p>مدّ يده المرتجفة إلى الأمام، كأنه يحاول أن يمسك بشيءٍ غير مرئي يتساقط من بين أصابعه.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>حتى الآن… لم أصل…</div>
+
+      <p>لكن صوته تلاشى في هدير النيران.</p>
+
+      <div class="moment-death">
+        <p>في تلك اللحظة بالذات، تجمّد الزمن في وعي سوبارو. ليس لأن العالم توقف… بل لأن كل ما تبقّى داخله كان ينهار في صمت.</p>
+        <p>كل الوجوه التي دفعها إلى الموت. كل الأصوات التي وثقت به. كل الدماء التي علقت بيديه. كل شيء كان يعود إليه دفعة واحدة، كأن العالم يرفض أخيرًا أن ينسى.</p>
+        <div class="dialogue"><span class="speaker">سوبارو</span>……أنا…</div>
+        <p>لم تكتمل الجملة. سيف رينهارد انخفض. وضوءٌ أبيض محض ابتلع كل شيء.</p>
+      </div>
+
+      <div class="scene-break">※ ※ ※ ※ ※</div>
+
+      <div class="arc-divider"><span>في ظلام آخر</span></div>
+
+      <p>كان لدى سوبارو إحساسٌ غامض بأنّ أحدًا ما في هذا الظلام العميق كان يهمس له بشيءٍ ما. كان ذلك مريحًا… مشجّعًا… تأكيدًا لوجوده… بل أشبه باعترافٍ دافئٍ بالحب.</p>
+
+      <p>لكن… لماذا؟</p>
+
+      <p>لم تكن تلك هي المحبوبة التي كان يبحث عنها سوبارو. محبوبته كانت في مكانٍ آخر، في عالمٍ لا يستطيع الوصول إليه، حيث تحققت أحلامها ونالت ما تستحقه من ثمار جهده.</p>
+
+      <p>لقد قدّم سوبارو التضحيات، الكثير من الناس، ثم قدّم نفسه في النهاية، من أجل ذلك الهدف.</p>
+
+      <p class="inner-thought">ولهذا… لا بأس.</p>
+
+      <p>لم يعد بحاجة إلى من يُنقذه. فالتعزية والخلاص… كان قد حصل عليهما منذ البداية، بطريقةٍ أو بأخرى.</p>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <p>كان هناك نداءٌ واضح. ينادي اسمه بلطف… بحزن… بحنان… وبحبٍّ لا يُخطئه القلب.</p>
+
+      <p>وهكذا، انفصل سوبارو عن دوّامة الموت، وهو يقبل ذلك الحضور البعيد… يقبله بالكامل، ويُجيب كلمات تلك الـ▒▒▒▒.</p>
+
+      <div class="scene-break">— — —</div>
+
+      <p style="text-align:center; font-family:'Amiri',serif; font-size:1.15rem; color:var(--text-dim); line-height:2; padding: 2rem 0;">
+        ——حتى لو رفضتني، لن أنساك أبداً.
+      </p>
+
+      <div style="text-align:center;margin-top:3rem;">
+        <div style="display:inline-block; border:1px solid var(--border); border-radius:8px; padding:1.5rem 2.5rem; background:var(--surface);">
+          <p style="font-size:0.72rem;letter-spacing:0.2em;color:var(--accent);margin-bottom:0.5rem;font-weight:600;">نهاية</p>
+          <p style="font-family:'Cinzel',serif;font-size:1rem;color:var(--text-dim);">Ayamatsu IF</p>
+        </div>
+      </div>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-5">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٥ / ٥</span>
+        <a class="nav-chapter-btn" href="whatif.html">قصص أخرى ←</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /reader-wrap -->
+
+<!-- READING PROGRESS -->
+<div class="reading-progress">
+  <div class="reading-progress-fill" id="progressFill"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="index.html">الرئيسية</a> &nbsp;·&nbsp;
+    <a href="whatif.html">قصص ماذا لو</a> &nbsp;·&nbsp;
+    <a href="https://rezerowebnovelfr.wordpress.com/">موقع الترجمة</a>
+  </p>
+  <p style="margin-top:0.4rem;color:#33324a;font-size:0.7rem;">
+    Re:Zero © تابيي ناغاتسوكي · هذا الموقع مشروع معجبين غير رسمي وغير تجاري.
+  </p>
+</footer>
+
+<script>
+  // ── CHAPTER NAVIGATION ──────────────────────────────
+  const tabs = document.querySelectorAll('.chapter-tab');
+  const sections = document.querySelectorAll('.chapter-section');
+  let current = 1;
+
+  function goToChapter(n) {
+    current = n;
+    tabs.forEach((t, i) => t.classList.toggle('active', i + 1 === n));
+    sections.forEach((s, i) => s.classList.toggle('active', i + 1 === n));
+    window.scrollTo({ top: document.querySelector('nav').offsetHeight + document.querySelector('.story-hero').offsetHeight, behavior: 'smooth' });
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => goToChapter(i + 1));
+  });
+
+  // Bottom nav buttons
+  document.getElementById('next-1').onclick = () => goToChapter(2);
+  document.getElementById('prev-2').onclick = () => goToChapter(1);
+  document.getElementById('next-2').onclick = () => goToChapter(3);
+  document.getElementById('prev-3').onclick = () => goToChapter(2);
+  document.getElementById('next-3').onclick = () => goToChapter(4);
+  document.getElementById('prev-4').onclick = () => goToChapter(3);
+  document.getElementById('next-4').onclick = () => goToChapter(5);
+  document.getElementById('prev-5').onclick = () => goToChapter(4);
+
+  // ── SETTINGS PANEL ──────────────────────────────────
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsPanel = document.getElementById('settingsPanel');
+  settingsBtn.addEventListener('click', () => settingsPanel.classList.toggle('open'));
+
+  // Font size
+  const sizeSlider = document.getElementById('fontSizeSlider');
+  const sizeVal = document.getElementById('fontSizeVal');
+  sizeSlider.addEventListener('input', () => {
+    const v = sizeSlider.value;
+    sizeVal.textContent = v + 'px';
+    document.querySelectorAll('.novel-body').forEach(b => b.style.fontSize = v + 'px');
+  });
+
+  // Line height
+  const lhSlider = document.getElementById('lineHeightSlider');
+  const lhVal = document.getElementById('lineHeightVal');
+  lhSlider.addEventListener('input', () => {
+    const v = (lhSlider.value / 100).toFixed(1);
+    lhVal.textContent = v;
+    document.querySelectorAll('.novel-body').forEach(b => b.style.lineHeight = v);
+  });
+
+  // ── THEME TOGGLE ────────────────────────────────────
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', () => document.body.classList.toggle('light-mode'));
+
+  // ── READING PROGRESS ────────────────────────────────
+  const progressFill = document.getElementById('progressFill');
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+    progressFill.style.width = pct + '%';
+  }, { passive: true });
+
+  // Close settings on outside click
+  document.addEventListener('click', (e) => {
+    if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+      settingsPanel.classList.remove('open');
+    }
+  });
+</script>
+</body>
+</html>

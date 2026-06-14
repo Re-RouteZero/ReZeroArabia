@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ري:زيرو — القصة الأساسية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cairo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #080808;
+    --card: #111111;
+    --border: rgba(255,255,255,0.07);
+    --border-hover: rgba(212,175,106,0.35);
+    --accent: #d4af6a;
+    --accent2: #f0cc8a;
+    --text: #f0ece0;
+    --muted: #7a7260;
+    --grey-nav: #1e1e1a;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; line-height: 1.8; min-height: 100vh; overflow-x: hidden; direction: rtl; }
+
+  /* Warm golden background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(160,100,20,0.3) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 90% 60%, rgba(120,80,10,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 5% 85%, rgba(100,60,10,0.1) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--grey-nav);
+    border-bottom: 1px solid rgba(212,175,106,0.12);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between; height: 52px;
+  }
+  .nav-logo { font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; color: var(--accent2); text-decoration: none; letter-spacing: 0.08em; direction: ltr; }
+  .nav-links { display: flex; }
+  nav a.nav-item { display: block; padding: 0 1rem; height: 52px; line-height: 52px; color: var(--muted); text-decoration: none; font-size: 0.82rem; font-weight: 500; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
+  nav a.nav-item:hover, nav a.nav-item.active { color: var(--accent2); border-bottom-color: var(--accent); }
+
+  .page-banner {
+    position: relative; min-height: 260px;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 4rem 2rem; overflow: hidden;
+  }
+  .page-banner-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 100% 100% at 50% -30%, rgba(160,100,20,0.5) 0%, transparent 65%),
+      linear-gradient(180deg, #120d00 0%, #080808 100%);
+  }
+  .page-banner-bg::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(212,175,106,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,175,106,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 50%, black 20%, transparent 75%);
+  }
+  .page-banner-content { position: relative; z-index: 2; }
+  .page-eyebrow { font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent); margin-bottom: 0.8rem; font-weight: 600; }
+  .page-title { font-family: 'Cinzel', serif; font-size: clamp(2rem, 6vw, 3.5rem); font-weight: 700; background: linear-gradient(135deg, #fff 30%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.6rem; }
+  .page-subtitle { font-size: 0.95rem; color: var(--muted); max-width: 500px; margin: 0 auto; line-height: 2; }
+
+  main { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 4rem 2rem 6rem; }
+
+  .info-box {
+    background: var(--card); border: 1px solid var(--border); border-right: 3px solid var(--accent);
+    border-radius: 8px; padding: 1.5rem 2rem; margin-bottom: 3rem; font-size: 0.93rem; color: var(--muted); line-height: 2;
+  }
+  .info-box strong { color: var(--text); font-weight: 600; }
+
+  .arcs-list { display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .arc-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.5rem 1.8rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+  .arc-card:hover { border-color: var(--border-hover); transform: translateX(-4px); }
+
+  .arc-num {
+    font-family: 'Cinzel', serif; font-size: 1.8rem; font-weight: 700;
+    color: rgba(212,175,106,0.25); flex-shrink: 0; width: 48px; text-align: center; direction: ltr;
+  }
+  .arc-body { flex: 1; }
+  .arc-title-en { font-family: 'Cinzel', serif; font-size: 0.85rem; color: var(--accent2); direction: ltr; text-align: right; margin-bottom: 0.2rem; }
+  .arc-title-ar { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+  .arc-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.8; }
+  .arc-badge { flex-shrink: 0; font-size: 0.7rem; padding: 0.2rem 0.7rem; border-radius: 999px; font-weight: 600; }
+  .badge-done { background: rgba(70,160,100,0.15); color: #70d0a0; border: 1px solid rgba(70,160,100,0.3); }
+  .badge-wip  { background: rgba(212,175,106,0.15); color: var(--accent2); border: 1px solid rgba(212,175,106,0.3); }
+  .badge-soon { background: rgba(100,100,120,0.15); color: #8888aa; border: 1px solid rgba(100,100,120,0.3); }
+
+  footer { border-top: 1px solid var(--border); padding: 2.5rem 2rem; text-align: center; color: var(--muted); font-size: 0.8rem; line-height: 2.2; position: relative; z-index: 1; }
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 600px) { nav a.nav-item { padding: 0 0.5rem; font-size: 0.73rem; } .arc-card { flex-direction: column; align-items: flex-start; gap: 0.8rem; } }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Re:Zero</a>
+  <div class="nav-links">
+    <a class="nav-item " href="index.html">الرئيسية</a>
+    <a class="nav-item" href="whatif.html">قصص ماذا لو</a>
+    <a class="nav-item active" href="canonical.html">القصة الأساسية</a>
+    <a class="nav-item" href="artistes.html">حقوق النشر</a>
+  </div>
+</nav>
+
+<div class="page-banner">
+  <div class="page-banner-bg"></div>
+  <div class="page-banner-content">
+    <p class="page-eyebrow">الرواية الإلكترونية الأصلية</p>
+    <h1 class="page-title">القصة الأساسية</h1>
+    <p class="page-subtitle">فصول ري:زيرو الرئيسية مترجمة إلى العربية — رحلة ناتسوكي سوبارو الأصلية في عالم آخر.</p>
+  </div>
+</div>
+
+<main>
+  <div class="info-box">
+    <strong>عن الترجمة العربية</strong><br>
+    يعمل فريق الترجمة على نقل فصول الرواية الإلكترونية الأصلية إلى العربية. قصص الـ IF مبنية على أحداث هذه الفصول، لذا يُنصح بقراءة القصة الأساسية أولاً لتجنّب الحرق.
+  </div>
+
+  <div class="arcs-list">
+
+    <div class="arc-card">
+      <div class="arc-num">1</div>
+      <div class="arc-body">
+        <p class="arc-title-en">Arc 1 — The Beginning</p>
+        <p class="arc-title-ar">الفصل الأول — البداية</p>
+        <p class="arc-desc">وصول سوبارو إلى عالم آخر ولقاؤه بإيميليا وكروش — نقطة انطلاق كل شيء.</p>
+      </div>
+      <span class="arc-badge badge-done">مترجم</span>
+    </div>
+
+    <div class="arc-card">
+      <div class="arc-num">2</div>
+      <div class="arc-body">
+        <p class="arc-title-en">Arc 2 — The Royal Selection</p>
+        <p class="arc-title-ar">الفصل الثاني — انتخاب الملك</p>
+        <p class="arc-desc">مواجهة المرشّحين للعرش واكتشاف الخطر الحقيقي خلف البلاط الملكي.</p>
+      </div>
+      <span class="arc-badge badge-done">مترجم</span>
+    </div>
+
+    <div class="arc-card">
+      <div class="arc-num">3</div>
+      <div class="arc-body">
+        <p class="arc-title-en">Arc 3 — The Meaning of Courage</p>
+        <p class="arc-title-ar">الفصل الثالث — معنى الشجاعة</p>
+        <p class="arc-desc">ليالي القصر الدموية وأثقل قرار اتّخذه سوبارو في حياته كلّها.</p>
+      </div>
+      <span class="arc-badge badge-done">مترجم</span>
+    </div>
+
+    <div class="arc-card">
+      <div class="arc-num">4</div>
+      <div class="arc-body">
+        <p class="arc-title-en">Arc 4 — The Sanctuary and the Witch's Greed</p>
+        <p class="arc-title-ar">الفصل الرابع — الملاذ وجشع الساحرة</p>
+        <p class="arc-desc">الملاذ المقيّد وسحر إيكيدنا ورهان سوبارو الأعظم ضد المصير.</p>
+      </div>
+      <span class="arc-badge badge-wip">قيد الترجمة</span>
+    </div>
+
+    <div class="arc-card">
+      <div class="arc-num">5</div>
+      <div class="arc-body">
+        <p class="arc-title-en">Arc 5 — The Stars That Engrave History</p>
+        <p class="arc-title-ar">الفصل الخامس — النجوم التي تنقش التاريخ</p>
+        <p class="arc-desc">حصار مدينة الماء وأبطال الدرع الذين يقفون في وجه الطوفان.</p>
+      </div>
+      <span class="arc-badge badge-soon">قريباً</span>
+    </div>
+
+    <div class="arc-card">
+      <div class="arc-num">6</div>
+      <div class="arc-body">
+        <p class="arc-title-en">Arc 6 — Hall of Memories</p>
+        <p class="arc-title-ar">الفصل السادس — قصر الذكريات</p>
+        <p class="arc-desc">رحلة سوبارو داخل برج الساحرة والحقيقة الخفية عن قدرة العودة من الموت.</p>
+      </div>
+      <span class="arc-badge badge-soon">قريباً</span>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="https://">موقع الترجمة الرئيسي</a>
+    &nbsp;·&nbsp;
+    <a href="https://twitter.com/">تويتر</a>
+    &nbsp;·&nbsp;
+    <a href="https://discord.gg/">ديسكورد</a>
+    &nbsp;·&nbsp;
+    <a href="https://witchculttranslation.com/">Witch Cult Translation</a>
+  </p>
+<!-- DONATE -->
+    <div class="panel donate">
+      <h3> Support Us</h3>
+      <a href="https://paypal.me/z0ldyx0" target="_blank">
+        <img src="paypaldonate.png" alt="Donate with PayPal">
+      </a>
+    </div>
+  </div>
+
+  <p style="margin-top:0.5rem;color:#44435a;font-size:0.72rem;">
+    Re:Zero kara Hajimeru Isekai Seikatsu © تابيي ناغاتسوكي · الرسومات © أصحابها المعنيّون<br>
+    هذا الموقع مشروع معجبين غير رسمي وغير تجاري.
+  </p>
+</footer>
+
+
+</body>
+</html>

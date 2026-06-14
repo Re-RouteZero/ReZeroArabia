@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tsugihagu IF — إعادة الترميم في عالم آخر من الصفر</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cairo:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0e;
+    --bg2: #0e0e14;
+    --surface: #121218;
+    --surface2: #17171f;
+    --border: rgba(255,255,255,0.07);
+    --accent: #a0a0b8;
+    --accent2: #d0d0e8;
+    --accent-dim: rgba(160,160,184,0.12);
+    --text: #e4e4ec;
+    --text-dim: #a8a8be;
+    --muted: #606070;
+    --gold: #c8c4b0;
+    --grey-nav: #101014;
+    --reader-bg: #0a0a0e;
+    --reader-max: 720px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Amiri', serif;
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--grey-nav);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 50px;
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 600;
+    color: var(--accent2); text-decoration: none; letter-spacing: 0.1em; direction: ltr;
+  }
+
+  .nav-links { display: flex; align-items: center; gap: 0; }
+
+  nav a.nav-item {
+    display: block; padding: 0 0.9rem; height: 50px; line-height: 50px;
+    color: var(--muted); text-decoration: none; font-size: 0.78rem; font-weight: 500;
+    border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; white-space: nowrap;
+  }
+
+  nav a.nav-item:hover { color: var(--text); border-bottom-color: var(--accent); }
+
+  .nav-settings {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0 0 0 1rem;
+    border-left: 1px solid var(--border);
+    margin-left: 0.5rem;
+  }
+
+  .icon-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); padding: 0.4rem;
+    border-radius: 6px; transition: color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .icon-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+  .icon-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  /* ── HERO ── */
+  .story-hero {
+    position: relative;
+    min-height: 480px;
+    display: flex; align-items: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 30% 40%, rgba(120,120,160,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(60,60,90,0.15) 0%, transparent 60%),
+      linear-gradient(180deg, #080810 0%, #09090f 50%, #0a0a0e 100%);
+  }
+
+  /* Subtle patchwork texture — stitches */
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 30px,
+        rgba(200,200,220,0.022) 30px,
+        rgba(200,200,220,0.022) 31px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 30px,
+        rgba(200,200,220,0.015) 30px,
+        rgba(200,200,220,0.015) 31px
+      );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 3rem 4rem 4rem;
+    max-width: 800px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.68rem; letter-spacing: 0.2em; font-weight: 600;
+    color: var(--accent2);
+    background: rgba(160,160,184,0.1);
+    border: 1px solid rgba(160,160,184,0.22);
+    border-radius: 4px; padding: 0.25rem 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent2);
+  }
+
+  .hero-title-en {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+    direction: ltr;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-title-ar {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: var(--gold);
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 1.2rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .meta-item {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  .meta-item svg { width: 13px; height: 13px; fill: currentColor; }
+
+  .sin-tag {
+    display: inline-flex; align-items: center; gap: 0.35rem;
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em;
+    padding: 0.22rem 0.8rem; border-radius: 999px;
+    background: rgba(160,160,184,0.14); color: #d0d0e8;
+    border: 1px solid rgba(160,160,184,0.28);
+  }
+
+  .spoiler-warning {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.75rem; color: #d0d0e8;
+    background: rgba(160,160,184,0.07);
+    border: 1px solid rgba(160,160,184,0.18);
+    border-radius: 6px; padding: 0.5rem 1rem;
+  }
+
+  .spoiler-warning svg { width: 14px; height: 14px; fill: currentColor; flex-shrink: 0; }
+
+  /* ── SETTINGS PANEL ── */
+  .settings-panel {
+    position: fixed; top: 50px; left: 0; right: 0; z-index: 90;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 2rem;
+    display: none; align-items: center; justify-content: center;
+    gap: 2rem; flex-wrap: wrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .settings-panel.open { display: flex; }
+
+  .setting-group {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  .setting-group label { white-space: nowrap; }
+
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100px; height: 3px; border-radius: 2px;
+    background: var(--border); outline: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--accent); cursor: pointer;
+  }
+
+  /* ── CHAPTER NAV ── */
+  .chapter-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .chapter-nav::-webkit-scrollbar { display: none; }
+
+  .chapter-tab {
+    display: block; padding: 0.7rem 1.1rem;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.78rem; font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap; cursor: pointer;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+
+  .chapter-tab:hover { color: var(--text-dim); }
+  .chapter-tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
+
+  /* ── READER ── */
+  .reader-wrap {
+    max-width: var(--reader-max);
+    margin: 0 auto;
+    padding: 4rem 2rem 8rem;
+  }
+
+  .novel-body {
+    font-family: 'Amiri', serif;
+    font-size: 1.08rem;
+    line-height: 2.15;
+  }
+
+  .chapter-section { display: none; }
+
+  .chapter-section.active {
+    display: block;
+    animation: fadeIn 0.35s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter-heading {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem; letter-spacing: 0.3em; font-weight: 600;
+    color: var(--accent);
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .chapter-heading::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .novel-body {
+    font-family: var(--reader-font, 'Cairo'), sans-serif;
+    font-size: var(--reader-size, 1.05rem);
+    line-height: var(--reader-lh, 2.1);
+    color: var(--text);
+  }
+
+  .novel-body p {
+    margin-bottom: 1.4em;
+    text-align: justify;
+  }
+
+  /* Dialogue lines */
+  .novel-body .dialogue {
+    color: var(--text);
+    font-weight: 500;
+    padding-right: 1rem;
+    border-right: 2px solid var(--accent);
+    margin-bottom: 1em;
+    line-height: 1.9;
+  }
+
+  .novel-body .speaker {
+    font-size: 0.8em;
+    color: var(--accent2);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.1em;
+    display: block;
+  }
+
+  /* Scene break */
+  .scene-break {
+    text-align: center;
+    color: var(--accent);
+    margin: 2.5rem 0;
+    letter-spacing: 0.5em;
+    font-size: 0.85rem;
+    opacity: 0.6;
+  }
+
+  /* Transformation / intense moment */
+  .moment-death {
+    background: linear-gradient(135deg, rgba(160,160,184,0.06), rgba(40,40,60,0.1));
+    border: 1px solid rgba(160,160,184,0.1);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+  }
+
+  .moment-death p { margin-bottom: 0.8em; color: var(--text-dim); }
+  .moment-death p:last-child { margin-bottom: 0; }
+
+  /* Inner thought */
+  .inner-thought {
+    font-style: italic;
+    color: var(--text-dim);
+    opacity: 0.85;
+  }
+
+  /* Section title card */
+  .arc-divider {
+    text-align: center;
+    margin: 3rem 0 2.5rem;
+  }
+
+  .arc-divider span {
+    display: inline-block;
+    font-size: 0.68rem; letter-spacing: 0.4em; font-weight: 600;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0.4rem 1.5rem;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .reading-progress {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 80;
+    height: 3px; background: rgba(255,255,255,0.04);
+  }
+
+  .reading-progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%; transition: width 0.1s linear;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .chapter-bottom-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-chapter-btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.65rem 1.3rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text-dim); text-decoration: none;
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .nav-chapter-btn:hover { border-color: var(--accent); color: var(--accent2); background: var(--accent-dim); }
+  .nav-chapter-btn:disabled { opacity: 0.3; cursor: default; pointer-events: none; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border); padding: 2rem 2rem;
+    text-align: center; color: var(--muted); font-size: 0.75rem; line-height: 2;
+  }
+
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── DARK / LIGHT toggle ── */
+  body.light-mode {
+    --bg: #f4f4f6;
+    --bg2: #eeeef2;
+    --surface: #e8e8ee;
+    --surface2: #dddde5;
+    --border: rgba(0,0,0,0.1);
+    --text: #141418;
+    --text-dim: #2a2a38;
+    --muted: #707080;
+    --reader-bg: #f4f4f6;
+    --grey-nav: #1e1e28;
+  }
+
+  body.light-mode nav { background: #1e1e28; }
+  body.light-mode .chapter-nav, body.light-mode .settings-panel { background: #e8e8ee; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 640px) {
+    .hero-content { padding: 2rem 1.5rem 3rem; }
+    .reader-wrap { padding: 2rem 1rem 6rem; }
+    nav a.nav-item { padding: 0 0.5rem; font-size: 0.72rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .chapter-section.active { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">Re:Zero</a>
+  <div class="nav-links">
+    <a class="nav-item" href="index.html">الرئيسية</a>
+    <a class="nav-item" href="whatif.html">قصص ماذا لو</a>
+    <div class="nav-settings">
+      <button class="icon-btn" id="settingsBtn" title="إعدادات القراءة" aria-label="إعدادات">
+        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm7.07-2.43a7 7 0 0 0 .07-.57 7 7 0 0 0-.07-.57l1.24-.97a.3.3 0 0 0 .07-.38l-1.17-2.03a.3.3 0 0 0-.36-.13l-1.46.59a5.28 5.28 0 0 0-.98-.57l-.22-1.55a.3.3 0 0 0-.3-.26h-2.34a.3.3 0 0 0-.3.26l-.22 1.55a5.28 5.28 0 0 0-.98.57l-1.46-.59a.3.3 0 0 0-.36.13L4.69 11.08a.3.3 0 0 0 .07.38l1.24.97a5.18 5.18 0 0 0-.07.57c0 .19.02.38.07.57l-1.24.97a.3.3 0 0 0-.07.38l1.17 2.03c.07.13.22.17.36.13l1.46-.59c.31.22.63.41.98.57l.22 1.55c.04.15.17.26.3.26h2.34c.14 0 .26-.11.3-.26l.22-1.55c.35-.16.67-.35.98-.57l1.46.59c.14.04.29 0 .36-.13l1.17-2.03a.3.3 0 0 0-.07-.38l-1.24-.97z"/></svg>
+      </button>
+      <button class="icon-btn" id="themeBtn" title="تبديل المظهر" aria-label="مظهر">
+        <svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- SETTINGS PANEL -->
+<div class="settings-panel" id="settingsPanel">
+  <div class="setting-group">
+    <label>حجم النص</label>
+    <input type="range" id="fontSizeSlider" min="14" max="22" value="17" step="1">
+    <span id="fontSizeVal">17px</span>
+  </div>
+  <div class="setting-group">
+    <label>تباعد الأسطر</label>
+    <input type="range" id="lineHeightSlider" min="160" max="260" value="210" step="10">
+    <span id="lineHeightVal">2.1</span>
+  </div>
+</div>
+
+<!-- STORY HERO -->
+<div class="story-hero" style="text-align:center; align-items:center; justify-content:center;">
+  <div class="hero-bg"></div>
+  <div class="hero-content" style="max-width:700px; padding: 4rem 2rem 4.5rem; margin:0 auto;">
+    <div class="hero-badge" style="margin:0 auto 1.2rem;">قصة IF — الشره</div>
+    <h1 class="hero-title-en" style="text-align:center; direction:ltr;">Tsugihagu IF</h1>
+    <p class="hero-title-ar" style="text-align:center;">إعادة الترميم في عالم آخر من الصفر</p>
+    <div class="hero-meta" style="justify-content:center;">
+      <span class="meta-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 14.93V18h-2v-1.07A8 8 0 0 1 4 9V8h2v1a6 6 0 0 0 12 0V8h2v1a8 8 0 0 1-7 7.93z"/></svg>
+        يبدأ من الفصل السادس
+      </span>
+      <span class="meta-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        حرق كبير — الفصل السادس
+      </span>
+      <span class="sin-tag">خطيئة الشره</span>
+    </div>
+
+    <!-- Route explanation -->
+    <div style="
+      background: rgba(160,160,184,0.06);
+      border: 1px solid rgba(160,160,184,0.15);
+      border-radius: 10px;
+      padding: 1.2rem 1.6rem;
+      margin: 1.4rem 0 1.2rem;
+      text-align: right;
+      font-family: 'Amiri', serif;
+      font-size: 1rem;
+      color: var(--text-dim);
+      line-height: 2;
+    ">
+      <span style="display:block; font-size:0.7rem; letter-spacing:0.2em; color:var(--accent); font-weight:600; margin-bottom:0.5rem; text-align:right;">عن هذا المسار</span>
+      هذا مسار <strong style="color:var(--text);">خطيئة الشره</strong> — ماذا لو نفّذ ناتسوكي سوبارو خطّة <strong style="color:var(--text);">كتب الموتى</strong>؟ قرار واحد قبِل فيه سوبارو أن يمزّق هويته ويُعيد تجميع نفسه من جديد — تحوّلٌ لا رجعة فيه نحو شيء مختلف تماماً.
+    </div>
+
+    <div class="spoiler-warning" style="margin:0 auto; display:inline-flex;">
+      <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      تحذير: هذه القصة تحتوي على حرق كبير للفصل السادس من الرواية الرئيسية
+    </div>
+  </div>
+</div>
+
+<!-- CHAPTER NAVIGATION -->
+<div class="chapter-nav">
+  <button class="chapter-tab active" data-chapter="1">الجزء الأول — الاختيار</button>
+  <button class="chapter-tab" data-chapter="2">الجزء الثاني — التحوّل</button>
+  <button class="chapter-tab" data-chapter="3">الجزء الثالث — الترميم</button>
+  <button class="chapter-tab" data-chapter="4">الجزء الرابع — ما تبقّى</button>
+</div>
+
+<!-- READER -->
+<div class="reader-wrap">
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 1 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section active" id="chapter-1">
+    <div class="chapter-heading">الجزء الأول — الاختيار</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>وليمة الساحرة</span></div>
+
+      <div class="moment-death">
+        <p>كانت الغرفة تفوح منها رائحة الكتب والعطور القديمة، وكانت إيكيدنا جالسةً أمامه بابتسامتها المعتادة — تلك الابتسامة التي لا تُخبرك أبداً ما إذا كانت تشعر بشيء حقيقي أم لا.</p>
+        <p>الكأس في يدها. العقد أمامه على الطاولة. وسوبارو يحدّق فيه وكأنه يحدّق في نهاية العالم.</p>
+      </div>
+
+      <div class="dialogue"><span class="speaker">إيكيدنا</span>لا داعي للتفكير طويلاً يا سوبارو. هذا العقد لا يطلب منك روحك… فقط استمراريّتك.</div>
+
+      <p class="inner-thought">الاستمرارية. ما معنى ذلك حقاً؟</p>
+
+      <p>كان يعرف ما ينطوي عليه الأمر. خطّة كتب الموتى — نسخ الوعي، تجميع الذكريات من نقاط موت متعددة، إعادة البناء من شظايا نفوس كثيرة. ليس موتاً حقيقياً. ليس حياةً حقيقية. شيءٌ بين بين.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>إذا وقّعتُ على هذا… ما الذي سيتبقّى منّي في النهاية؟</div>
+      <div class="dialogue"><span class="speaker">إيكيدنا</span>ذلك يعتمد على ما تعريف به نفسك أنت. إن كنتَ اسماً وذكريات — نعم، ستبقى. إن كنتَ مجموع انفعالاتك وضعفك — فلا، كثيرٌ منه سيذوب.</div>
+
+      <p>ذوبان. كلمة مريحة بشكل مزعج.</p>
+
+      <p>فكّر في إميليا. في ريم. في بياتريس. في كل من أحبّهم ووعدهم. هل سيتذكّر وجوههم بنفس الطريقة بعد أن يمرّ بهذا؟ هل ستظل تلك المشاعر كما هي أم ستصبح مجرّد بيانات محفوظة في وعيٍ مُرمَّم؟</p>
+
+      <div class="dialogue"><span class="speaker">إيكيدنا</span>إميليا ستحتاجك. هذا المسار هو الوحيد الذي يُبقيها آمنةً حتى نهاية برج تأوس.</div>
+
+      <div class="moment-death">
+        <p>وفي تلك اللحظة، بالضبط تلك اللحظة، لم يفكّر سوبارو في نفسه.</p>
+        <p>مدّ يده ووقّع.</p>
+      </div>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <div class="arc-divider"><span>بداية التمزّق</span></div>
+
+      <p>لم يكن الألم فورياً. بل جاء على شكل ضباب — إحساس خفيف بأن شيئاً ما في طرف وعيه بدأ يتلاشى.</p>
+
+      <p>الذاكرة الأولى التي شعر بتآكلها كانت تافهة بشكل مضحك: رائحة الغرفة التي نام فيها في بيت إميليا أول مرة. ثم تلتها صورة وجه والده وهو يخبره بشيء ما — لم يعد يتذكر ماذا.</p>
+
+      <p class="inner-thought">لا بأس. هذه تفاصيل. الجوهر موجود.</p>
+
+      <div class="dialogue"><span class="speaker">بياتريس</span>سوبارو… هل أنتَ بخير؟</div>
+
+      <p>كانت تقف أمامه في ممرّ البرج، عيناها المزرقّتان تدرسانه بقلق لم تعتَد إخفاءه. لاحظت شيئاً. بياتريس دائماً تلاحظ.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>بخير. فقط تعبت قليلاً.</div>
+      <div class="dialogue"><span class="speaker">بياتريس</span>لا تكذب عليّ، أعني ذلك تماماً.</div>
+
+      <!-- صورة -->
+      <div style="margin: 2.5rem 0; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); min-height:180px; display:flex; align-items:center; justify-content:center;">
+        <img src="images/tsugi.png" alt="Tsugihagu IF" style="width:100%; max-height:340px; object-fit:cover; display:block;" onerror="this.parentElement.style.minHeight='120px'">
+      </div>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" disabled>← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">١ / ٤</span>
+        <button class="nav-chapter-btn" id="next-1">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 2 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-2">
+    <div class="chapter-heading">الجزء الثاني — التحوّل</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>الأجزاء المتناثرة</span></div>
+
+      <p>المرّة الأولى التي لاحظ فيها سوبارو التغيير الحقيقي كانت حين نظر إلى إميليا وشعر بشيء مختلف.</p>
+
+      <p>لم تكن المشاعر قد اختفت. لا. لكنها باتت… مُرتّبة بطريقة ما. كما لو أنه يتذكّر أنه يحبّها بدلاً من أن يشعر بذلك بشكل مباشر. كمسافة زجاجية رفيعة بين الشعور وصاحبه.</p>
+
+      <div class="dialogue"><span class="speaker">إميليا</span>سوبارو؟ تبدو بعيداً.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>أنا هنا. دائماً هنا.</div>
+
+      <p class="inner-thought">هل هذه حقيقة أم مجرّد جملة حفظتُها لأقولها؟</p>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <div class="arc-divider"><span>الذاكرة المُرمَّمة</span></div>
+
+      <div class="moment-death">
+        <p>في الليل الذي سبق المعركة الكبرى، جلس سوبارو وحده وحاول أن يستدعي صورة أمّه.</p>
+        <p>لم يستطع.</p>
+        <p>ملامحها كانت موجودة — شعرها، ابتسامتها — لكن الإحساس المرتبط بها، تلك الدفء الذي كان يملأ صدره حين يفكّر فيها، لم يعد موجوداً. كما لو أن شخصاً ما أخرج الصورة من الإطار وأبقى الإطار فارغاً.</p>
+      </div>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>…لا بأس.</div>
+
+      <p>قالها لنفسه بصوت هادئ وهو ينظر إلى ظلمة البرج.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>أنا ما زلت أعرف لماذا أقاتل. هذا يكفي.</div>
+
+      <p>لكن شيئاً ما في داخله لم يُصدّق ذلك تماماً.</p>
+
+      <div class="arc-divider"><span>روسوال والحقيقة</span></div>
+
+      <p>وجده روسوال في تلك الحال، منتصفَ الليل، عيناه المتبايتا اللون تدرسانه بهدوء السحرة القدامى.</p>
+
+      <div class="dialogue"><span class="speaker">روسوال</span>لقد وقّعتَ على عقد الساحرة، أليس كذلك يا سوبارو-كون؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>نعم.</div>
+      <div class="dialogue"><span class="speaker">روسوال</span>وكيف يبدو العالم الآن؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>…أوسع. وأفرغ قليلاً.</div>
+
+      <p>ابتسم روسوال بابتسامته الغامضة المعتادة، لكنها كانت أخفّ هذه المرة. أقل تمسرحاً.</p>
+
+      <div class="dialogue"><span class="speaker">روسوال</span>هذا منطقي. الشره — خطيئة الابتلاع — لا تبتلع الآخرين دائماً. أحياناً تبتلع صاحبها أولاً.</div>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-2">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٢ / ٤</span>
+        <button class="nav-chapter-btn" id="next-2">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 3 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-3">
+    <div class="chapter-heading">الجزء الثالث — الترميم</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>القتال الأخير في البرج</span></div>
+
+      <div class="moment-death">
+        <p>البرج كان يتفكّك حول سوبارو وهو يصعد الدرج. صخب المعارك يصل من كل الاتجاهات.</p>
+        <p>لكن سوبارو لم يكن خائفاً. وهذا بحدّ ذاته كان مخيفاً.</p>
+        <p>أدرك في تلك اللحظة أن الشعور بالخوف أيضاً قد خُفّف. لم يختفِ، لكنه بات مُصنَّفاً، مُدرَكاً من بُعد بدلاً من أن يسري في عروقه.</p>
+      </div>
+
+      <p>واجه لويلس كلوفيل وهو شبه هادئ. الوحش من نوع الأسد استدعاه وزير الشره — الأسقف الذي ابتلع ذكريات لا تُحصى.</p>
+
+      <div class="dialogue"><span class="speaker">لويلس</span>يا لك من كائن غريب… أشعر بالعديد من الأصوات داخلك. أصواتٌ ليست أصواتك.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>أعلم.</div>
+      <div class="dialogue"><span class="speaker">لويلس</span>ألا يُزعجك ذلك؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>كثيراً. لكنني قرّرت أن أحتفظ بها جميعاً.</div>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <div class="arc-divider"><span>بياتريس والاختيار الحقيقي</span></div>
+
+      <p>بعد انتهاء المعركة، وجدها جالسةً في ركن من ردهة البرج، تحتضن كتابها كعادتها. لكن عيناها كانتا ترقبانه حين اقترب.</p>
+
+      <div class="dialogue"><span class="speaker">بياتريس</span>أخبرني بصدق يا سوبارو. هل ما زلتَ أنتَ؟</div>
+
+      <p>توقّف. الجواب السهل كان أن يقول نعم. لكن بياتريس لا تستحق الجواب السهل.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>أنا… مُرمَّم. مثل قطعة قماش يُعاد خياطتها. الشكل العام نفسه. لكن مواضع الخيوط تختلف.</div>
+      <div class="dialogue"><span class="speaker">بياتريس</span>…هل هذا يؤلمك؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>كان يؤلمني. الآن أقلّ.</div>
+
+      <div class="moment-death">
+        <p>نهضت بياتريس ببطء، وسارت نحوه، وأمسكت بيده بكلتا يديها الصغيرتين.</p>
+        <p>كان يتوقع أن يشعر بالدفء المعتاد. جاء الدفء، لكنه وصل خطوة واحدة متأخراً، كما لو مرّ عبر طبقة رقيقة.</p>
+        <p>ومع ذلك، أحسّ بشيء ما يتشكّل في صدره — شيء يشبه كثيراً الامتنان.</p>
+      </div>
+
+      <div class="dialogue"><span class="speaker">بياتريس</span>أنا لا أحبّ ما فعلتَه بنفسك. لكنني ما زلتُ أختارك يا سوبارو.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>شكراً.</div>
+      <p class="inner-thought">وهذه المرة… شعرتُ بها.</p>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-3">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٣ / ٤</span>
+        <button class="nav-chapter-btn" id="next-3">التالي →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════ -->
+  <!-- CHAPTER 4 -->
+  <!-- ══════════════════════════════════════════════════ -->
+  <div class="chapter-section" id="chapter-4">
+    <div class="chapter-heading">الجزء الرابع — ما تبقّى</div>
+    <div class="novel-body">
+
+      <div class="arc-divider"><span>بعد البرج</span></div>
+
+      <p>انتهت المعارك. إميليا بأمان. البرج سقط. والثمن دُفع.</p>
+
+      <p>في مساء ذلك اليوم، جلس سوبارو على حافة التلة المطلّة على السهل، ينظر إلى الأفق. كانت السماء ذات لون برتقالي عميق — اللون الذي أحبّه دائماً في غروب الشمس.</p>
+
+      <p class="inner-thought">هل ما زلتُ أحبّه؟</p>
+
+      <p>لاحظ أن الإحساس بالجمال لا يزال موجوداً. خُفِّف، نعم، لكنه باقٍ. وهذا أكثر مما توقّعه.</p>
+
+      <div class="dialogue"><span class="speaker">إميليا</span>وجدتُك أخيراً.</div>
+
+      <p>جلست بجانبه دون أن تُغيّر نظرتها عن الأفق. شعرها الفضي يلمع في ضوء الغروب.</p>
+
+      <div class="dialogue"><span class="speaker">إميليا</span>سوبارو… أعرف أنك دفعتَ ثمناً كبيراً. حتى لو لم تُخبرني تفاصيله.</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>أنتِ دائماً تلاحظين.</div>
+      <div class="dialogue"><span class="speaker">إميليا</span>لأنني أعرفك. الجزء الذي تغيّر — أعرفه أيضاً.</div>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <div class="arc-divider"><span>اللقاء في الظلام الداخلي</span></div>
+
+      <div class="moment-death">
+        <p>في تلك الليلة، حلم سوبارو بغرفة مليئة بمرايا.</p>
+        <p>في كل مرآة كان يرى نفسه — لكن كلّ واحدة تعكس نسخة مختلفة. سوبارو يبكي. سوبارو يضحك. سوبارو يصرخ. سوبارو يصمت.</p>
+        <p>ثم أدرك: هذه ليست مخيّلته. هذه الأصوات الأخرى التي دخلت إليه.</p>
+        <p>ذكريات موتٍ لم يعِشها بجسده، لكن حُفِرت في وعيه.</p>
+      </div>
+
+      <div class="dialogue"><span class="speaker">صوت من المرايا</span>من أنتَ الآن؟</div>
+      <div class="dialogue"><span class="speaker">سوبارو</span>…أنا ناتسوكي سوبارو.</div>
+      <div class="dialogue"><span class="speaker">صوت من المرايا</span>وهل هذا يكفيك؟</div>
+
+      <p>لم يُجب فوراً. فكّر طويلاً وهو يتأمّل نفسه في المرايا الكثيرة.</p>
+
+      <div class="dialogue"><span class="speaker">سوبارو</span>لا أعلم. لكنني سأبقى أجرّب حتى أعرف.</div>
+
+      <div class="scene-break">※ ※ ※</div>
+
+      <p>استيقظ عند الفجر. بياتريس نائمة بجانبه، وإميليا في الغرفة المجاورة.</p>
+
+      <p>نظر إلى يديه. نفس اليدين. نفس الندوب.</p>
+
+      <p class="inner-thought">كثيرٌ منّي ذاب. لكن ما بقي… اختار البقاء.</p>
+
+      <div style="text-align:center;margin-top:3rem;">
+        <div style="display:inline-block; border:1px solid var(--border); border-radius:8px; padding:1.5rem 2.5rem; background:var(--surface);">
+          <p style="font-size:0.72rem;letter-spacing:0.2em;color:var(--accent);margin-bottom:0.5rem;font-weight:600;">نهاية</p>
+          <p style="font-family:'Cinzel',serif;font-size:1rem;color:var(--text-dim);">Tsugihagu IF</p>
+        </div>
+      </div>
+
+      <div class="chapter-bottom-nav">
+        <button class="nav-chapter-btn" id="prev-4">← السابق</button>
+        <span style="font-size:0.75rem;color:var(--muted)">٤ / ٤</span>
+        <a class="nav-chapter-btn" href="whatif.html">قصص أخرى ←</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /reader-wrap -->
+
+<!-- READING PROGRESS -->
+<div class="reading-progress">
+  <div class="reading-progress-fill" id="progressFill"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="index.html">الرئيسية</a> &nbsp;·&nbsp;
+    <a href="whatif.html">قصص ماذا لو</a> &nbsp;·&nbsp;
+    <a href="https://rezerowebnovelfr.wordpress.com/">موقع الترجمة</a>
+  </p>
+  <p style="margin-top:0.4rem;color:#2a2a3a;font-size:0.7rem;">
+    Re:Zero © تابيي ناغاتسوكي · هذا الموقع مشروع معجبين غير رسمي وغير تجاري.
+  </p>
+</footer>
+
+<script>
+  // ── CHAPTER NAVIGATION ──────────────────────────────
+  const tabs = document.querySelectorAll('.chapter-tab');
+  const sections = document.querySelectorAll('.chapter-section');
+
+  function goToChapter(n) {
+    tabs.forEach((t, i) => t.classList.toggle('active', i + 1 === n));
+    sections.forEach((s, i) => s.classList.toggle('active', i + 1 === n));
+    window.scrollTo({ top: document.querySelector('nav').offsetHeight + document.querySelector('.story-hero').offsetHeight, behavior: 'smooth' });
+  }
+
+  tabs.forEach((tab, i) => tab.addEventListener('click', () => goToChapter(i + 1)));
+
+  // Bottom nav
+  document.getElementById('next-1').onclick = () => goToChapter(2);
+  document.getElementById('prev-2').onclick = () => goToChapter(1);
+  document.getElementById('next-2').onclick = () => goToChapter(3);
+  document.getElementById('prev-3').onclick = () => goToChapter(2);
+  document.getElementById('next-3').onclick = () => goToChapter(4);
+  document.getElementById('prev-4').onclick = () => goToChapter(3);
+
+  // ── SETTINGS PANEL ──────────────────────────────────
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsPanel = document.getElementById('settingsPanel');
+  settingsBtn.addEventListener('click', () => settingsPanel.classList.toggle('open'));
+
+  const sizeSlider = document.getElementById('fontSizeSlider');
+  const sizeVal = document.getElementById('fontSizeVal');
+  sizeSlider.addEventListener('input', () => {
+    sizeVal.textContent = sizeSlider.value + 'px';
+    document.querySelectorAll('.novel-body').forEach(b => b.style.fontSize = sizeSlider.value + 'px');
+  });
+
+  const lhSlider = document.getElementById('lineHeightSlider');
+  const lhVal = document.getElementById('lineHeightVal');
+  lhSlider.addEventListener('input', () => {
+    const v = (lhSlider.value / 100).toFixed(1);
+    lhVal.textContent = v;
+    document.querySelectorAll('.novel-body').forEach(b => b.style.lineHeight = v);
+  });
+
+  // ── THEME TOGGLE ────────────────────────────────────
+  document.getElementById('themeBtn').addEventListener('click', () => document.body.classList.toggle('light-mode'));
+
+  // ── READING PROGRESS ────────────────────────────────
+  const progressFill = document.getElementById('progressFill');
+  window.addEventListener('scroll', () => {
+    const docH = document.documentElement.scrollHeight - window.innerHeight;
+    progressFill.style.width = (docH > 0 ? (window.scrollY / docH) * 100 : 0) + '%';
+  }, { passive: true });
+
+  // Close settings on outside click
+  document.addEventListener('click', (e) => {
+    if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target))
+      settingsPanel.classList.remove('open');
+  });
+</script>
+</body>
+</html>

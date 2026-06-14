@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>— ري:زيرو —</title>
+<body>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #07070f;
+    --bg2: #0d0d1a;
+    --card: #111120;
+    --border: rgba(255,255,255,0.07);
+    --accent: #9b7fe8;
+    --accent2: #c4a8ff;
+    --text: #e8e6f0;
+    --muted: #7a7890;
+    --gold: #d4af6a;
+    --grey-nav: #1e1e2a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    font-weight: 400;
+    line-height: 1.8;
+    min-height: 100vh;
+    overflow-x: hidden;
+    direction: rtl;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: var(--grey-nav);
+    border-bottom: 1px solid rgba(155,127,232,0.15);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    direction: ltr;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0;
+  }
+
+  nav a.nav-item {
+    display: block;
+    padding: 0 1rem;
+    height: 56px;
+    line-height: 56px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.83rem;
+    font-weight: 500;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  nav a.nav-item:hover, nav a.nav-item.active {
+    color: var(--accent2);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 56px 2rem 0;
+  }
+
+  /* Re:Zero themed hero background: dark night with aurora purple */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(60,20,120,0.55) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 50% at 20% 80%, rgba(100,40,180,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(40,10,80,0.3) 0%, transparent 60%),
+      linear-gradient(180deg, #07070f 0%, #0d0820 40%, #120a25 70%, #07070f 100%);
+  }
+
+  /* Floating orbs for atmosphere */
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(120,60,220,0.18) 0%, transparent 70%);
+    animation: pulse 6s ease-in-out infinite;
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: 10%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(80,40,160,0.12) 0%, transparent 70%);
+    animation: pulse 8s ease-in-out infinite reverse;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 50%;
+    animation: twinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* Hero image */
+  .hero-image-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .hero-image {
+    height: 75vh;
+    max-height: 700px;
+    object-fit: contain;
+    object-position: bottom;
+    opacity: 0.22;
+    filter: saturate(0.6) brightness(0.8);
+    mask-image: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+  }
+
+  /* Hero content */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 780px;
+    padding: 6rem 2rem 4rem;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    background: linear-gradient(135deg, #ffffff 20%, var(--accent2) 60%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.4rem;
+    direction: ltr;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 3vw, 1.4rem);
+    color: var(--gold);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-desc {
+    font-size: 1rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 2.5rem;
+    line-height: 2;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 2.2rem;
+    background: linear-gradient(135deg, var(--accent), #7a5cc8);
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(100,60,200,0.35);
+    margin-left: 0.6rem;
+  }
+
+  .hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(100,60,200,0.5);
+  }
+
+  .hero-cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 2rem;
+    background: transparent;
+    color: var(--accent2);
+    font-family: 'Cairo', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 1px solid rgba(155,127,232,0.35);
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .hero-cta-secondary:hover {
+    background: rgba(155,127,232,0.08);
+    border-color: var(--accent);
+  }
+
+  /* Scroll indicator */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    animation: bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 32px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+  }
+
+  /* ── SECTIONS GRID ── */
+  .sections-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem 6rem;
+  }
+
+  .sections-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .sections-heading {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 3px;
+    background: var(--card-accent, var(--accent));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .section-card:hover {
+    border-color: var(--border-hover, rgba(180,150,255,0.3));
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(60,20,120,0.2);
+  }
+
+  .section-card:hover::before { opacity: 1; }
+
+  .card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text);
+    direction: rtl;
+  }
+
+  .card-desc-sm {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.8;
+  }
+
+  .card-arrow {
+    margin-top: auto;
+    font-size: 0.8rem;
+    color: var(--accent2);
+    font-weight: 600;
+  }
+
+  /* specific card accents */
+  .card-whatif  { --card-accent: #9b7fe8; --border-hover: rgba(155,127,232,0.35); }
+  .card-canon   { --card-accent: #d4af6a; --border-hover: rgba(212,175,106,0.35); }
+  .card-light   { --card-accent: #70d0a0; --border-hover: rgba(70,200,140,0.35); }
+  .card-art     { --card-accent: #80b0e8; --border-hover: rgba(100,160,230,0.35); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── ABOUT STRIP ── */
+  .about-strip {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .about-text h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+
+  .about-text p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 2;
+    margin-bottom: 1rem;
+  }
+
+  .about-text p strong { color: var(--text); }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.2;
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 2.2;
+  }
+
+  footer a { color: var(--accent2); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 700px) {
+    .about-strip { grid-template-columns: 1fr; gap: 2rem; }
+    .about-stats { grid-template-columns: 1fr 1fr; }
+    nav .nav-links { gap: 0; }
+    nav a.nav-item { padding: 0 0.5rem; font-size: 0.75rem; }
+  }
+</style>
+</head>
+<!-- Description (THIS fixes the text in Google) -->
+  <meta name="description" content="اكتشف كل المسارات البديلة لعالم Re:Zero كيف يمكن لقرار واحد أن يغير كل شيء">
+
+  <!-- Open Graph (for image + better preview) -->
+  <meta property="og:title" content="Re:turnByRoute">
+  <meta property="og:description" content="">
+  <meta name="description" content="ترجمات عربية لقصص Re:Zero IF — حكايات بديلة تستكشف مسارات مختلفة في عالم ناتسوكي سوبارو. تشمل Ayamatsu، Oboreru، Kasaneru و更多.">
+   <meta property="og:description" content="حكايات بديلة من عالم Re:Zero المترجم للعربية">
+   <meta property="og:image" content="images/og-preview.png">
+  <meta property="og:url" content="https://Re-RouteZero.github.io/IF-stories">
+  <meta property="og:type" content="website">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <!-- Google verification -->
+
+<meta name="google-site-verification" content="czXvFsiNut-3Q-868rG1h1q4jw3upxrVGM_oxQ2Q4q8" />
+<!-- SEO -->
+
+<meta name="description" content="Re:zero If routes novel">
+<title>ReZeroArabia - Re:Zero Novel Arabic Translation Archive</title>
+
+<meta name="description" content="Read Re:Zero kara Hajimeru Isekai Seikatsu in Arabic. Explore translated light novel chapters, story arcs, character information, and the complete Re:Zero reading experience for Arabic readers.">
+
+<meta name="keywords" content="Re:Zero, ReZero Arabic, Re:Zero Novel, Arabic Translation, Subaru Natsuki, Emilia, Rem, Light Novel Arabic">
+
+<meta property="og:title" content="ReZeroArabia | Re:Zero Arabic Novel Archive">
+<meta property="og:description" content="The Arabic destination for Re:Zero light novel readers.">
+<meta property="og:type" content="website">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ReZeroArabia | Re:Zero Arabic Novel Archive">
+<meta name="twitter:description" content="Read Re:Zero in Arabic. Chapters, arcs, character guides, and more.">
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">Re:Zero</a>
+  <div class="nav-links">
+    <a class="nav-item active" href="index.html">الرئيسية</a>
+    <a class="nav-item" href="whatif.html">قصص ماذا لو</a>
+    <a class="nav-item" href="canonical.html">القصة الأساسية</a>
+    <a class="nav-item" href="artistes.html">حقوق النشر</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Stars -->
+  <div class="stars" id="stars"></div>
+
+  <!-- Background character silhouette image -->
+  <div class="hero-image-wrap">
+    <img class="hero-image" src="png" alt="Re:Zero" onerror="this.style.display='none'">
+  </div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">ترجمة عربية · الرواية الإلكترونية</p>
+    <h1 class="hero-title">Re:Zero</h1>
+    <p class="hero-subtitle">قصص الـ IF — ماذا لو؟</p>
+    <p class="hero-desc">
+      استكشف المسارات التي لم يسلكها ناتسوكي سوبارو.
+      قصص بديلة تكشف ثمن كل قرار، وكيف يمكن للحظة واحدة أن تغير كل شيء.
+    </p>
+    <div>
+      <a class="hero-cta" href="whatif.html">استكشف القصص ←</a>
+      <a class="hero-cta-secondary" href="https://drive.google.com/drive/folders/azide1ao834MMOTXWEOvKtaYLLLsGRgexyXpZe?usp=sharing" target="_blank" rel="noopener">تحميل المجموعة</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">اكتشف</div>
+</section>
+
+<!-- SECTIONS GRID -->
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="https://">موقع الترجمة الرئيسي</a>
+    &nbsp;·&nbsp;
+    <a href="https://twitter.com/">تويتر</a>
+    &nbsp;·&nbsp;
+    <a href="https://discord.gg/">ديسكورد</a>
+    &nbsp;·&nbsp;
+    <a href="https://witchculttranslation.com/">Witch Cult Translation</a>
+  </p>
+<!-- DONATE -->
+    <div class="panel donate">
+      <h3> Support Us</h3>
+      <a href="https://paypal.me/z0ldyx0" target="_blank">
+        <img src="paypaldonate.png" alt="Donate with PayPal">
+      </a>
+    </div>
+  </div>
+
+  <p style="margin-top:0.5rem;color:#44435a;font-size:0.72rem;">
+    Re:Zero kara Hajimeru Isekai Seikatsu © تابيي ناغاتسوكي · الرسومات © أصحابها المعنيّون<br>
+    هذا الموقع مشروع معجبين غير رسمي وغير تجاري.
+  </p>
+</footer>
+
+<script>
+  // Generate stars
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 80; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      --dur: ${2 + Math.random() * 4}s;
+      --delay: ${-Math.random() * 4}s;
+      width: ${Math.random() > 0.8 ? 3 : 2}px;
+      height: ${Math.random() > 0.8 ? 3 : 2}px;
+    `;
+    starsContainer.appendChild(star);
+  }
+</script>
+</body>
+</html>
